@@ -15,6 +15,10 @@ class HomeState extends State<Home> {
   final user = FirebaseAuth.instance.currentUser!;
   int _currentIndex = 0;
 
+  void logOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,13 +28,21 @@ class HomeState extends State<Home> {
           backgroundColor: Colors.white,
           elevation: 0,
           actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.nightlight,
+              ),
+              onPressed: () {},
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: IconButton(
-                icon: const Icon(Icons.nightlight),
-                onPressed: () {},
+                onPressed: logOut,
+                icon: const Icon(
+                  Icons.logout_rounded,
+                ),
               ),
-            ),
+            )
           ],
         ),
         backgroundColor: Colors.white,
@@ -132,7 +144,7 @@ class HomeState extends State<Home> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 40,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 32, right: 32),
@@ -147,17 +159,32 @@ class HomeState extends State<Home> {
                     Padding(
                       padding: const EdgeInsets.only(right: 32),
                       child: TextButton(
-                          onPressed: () {}, child: const Text("Privacy")),
+                        onPressed: () {},
+                        child: const Text(
+                          "Privacy",
+                          style: TextStyle(color: Color(0xFF292929)),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 32, right: 32),
                       child: TextButton(
-                          onPressed: () {}, child: const Text("Terms")),
+                        onPressed: () {},
+                        child: const Text(
+                          "Terms",
+                          style: TextStyle(color: Color(0xFF292929)),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 32),
                       child: TextButton(
-                          onPressed: () {}, child: const Text("About")),
+                        onPressed: () {},
+                        child: const Text(
+                          "About",
+                          style: TextStyle(color: Color(0xFF292929)),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -196,7 +223,10 @@ class HomeState extends State<Home> {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("© WITT, Inc. 2024. \nWe love our users!"),
+                    Text(
+                      "© WITT, Inc. 2024. \nWe love our users!",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -223,7 +253,7 @@ class HomeState extends State<Home> {
                   buildNavItem(Icons.home_outlined, 'Home', 0),
                   buildNavItem(Icons.explore_outlined, 'Search', 1),
                   buildNavItem(Icons.camera_rounded, 'Camera', 2),
-                  buildNavItem(Icons.cases_outlined, 'My Page', 3),
+                  buildNavItem(Icons.person_outline_rounded, 'My Page', 3),
                 ],
               ),
             ),

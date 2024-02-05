@@ -1,11 +1,13 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print, use_build_context_synchronously, unnecessary_null_comparison
 
-import 'dart:io' show File, Platform;
+import 'dart:io' show File;
 import 'dart:typed_data';
+// import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:logger/logger.dart';
 import 'package:login_auth/components/button.dart';
 
 class PickImage extends StatefulWidget {
@@ -18,13 +20,8 @@ class PickImage extends StatefulWidget {
 class _CameraPageState extends State<PickImage> {
   Uint8List? _image;
   File? selectedImage;
-  List<String> modelSelectionOptions = [
-    "YOLO v5s",
-    "YOLO v5m",
-    "YOLO v5l",
-    "YOLO v5x"
-  ];
-  String selectedModel = "YOLO v5x";
+  String selectedModel = "yolov5x";
+  List<dynamic> classNames = [];
   int _currentIndex = 2;
 
   @override
@@ -33,122 +30,145 @@ class _CameraPageState extends State<PickImage> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SafeArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: Container(
-                            padding: const EdgeInsets.all(
-                              4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                style: BorderStyle.solid,
-                                color: Colors.grey.shade300,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                20,
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.arrow_back_rounded,
-                              color: Color(0xFF292929),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Stack(
-                      children: [
-                        _image != null
-                            ? Container(
-                                width: 320,
-                                height: 360,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  color: Colors.grey.shade100,
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: MemoryImage(_image!),
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                width: 320,
-                                height: 360,
-                                color: Colors.grey.shade200,
-                              ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Form(
-                      child: Column(
+        body: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 64,
-                            ),
-                            child: DropdownButtonFormField(
-                              value: selectedModel,
-                              items: modelSelectionOptions
-                                  .map((selection) => DropdownMenuItem(
-                                        value: selection,
-                                        child: Text(selection),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedModel = value.toString();
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                labelText: "Select YOLO Model",
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Container(
+                              padding: const EdgeInsets.all(
+                                4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  style: BorderStyle.solid,
+                                  color: Colors.grey.shade300,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  20,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.arrow_back_rounded,
+                                color: Color(0xFF292929),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    InkWell(
-                      onTap: () => showImagePickerOption(context),
-                      child: const Button(
-                        text: "Import Image",
-                        bgColor: Colors.white,
-                        textColor: Color(0xFF292929),
-                        borderColor: Colors.grey,
+                      const SizedBox(
+                        height: 12,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    InkWell(
-                      onTap: () => _uploadImage(),
-                      child: const Button(
-                        text: "Submit",
-                        bgColor: Color(0xFF292929),
-                        textColor: Colors.white,
-                        borderColor: Color(0xFF292929),
+                      Stack(
+                        children: [
+                          _image != null
+                              ? Container(
+                                  width: 320,
+                                  height: 360,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    color: Colors.grey.shade100,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: MemoryImage(_image!),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  width: 320,
+                                  height: 360,
+                                  color: Colors.grey.shade200,
+                                ),
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          InkWell(
+                            onTap: () => showImagePickerOption(context),
+                            child: const Button(
+                              text: "Import Image",
+                              bgColor: Colors.white,
+                              textColor: Color(0xFF292929),
+                              borderColor: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          InkWell(
+                            onTap: () => _uploadImage(),
+                            child: const Button(
+                              text: "Submit",
+                              bgColor: Color(0xFF292929),
+                              textColor: Colors.white,
+                              borderColor: Color(0xFF292929),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (classNames != null && classNames.isNotEmpty)
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: 320,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Result:",
+                                    style: TextStyle(
+                                      color: Color(0xFF292929),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    classNames.join('\n'),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 80,
+                            )
+                          ],
+                        )
+                      else
+                        Container(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -171,7 +191,7 @@ class _CameraPageState extends State<PickImage> {
                   buildNavItem(Icons.home_outlined, 'Home', 0),
                   buildNavItem(Icons.explore_outlined, 'Search', 1),
                   buildNavItem(Icons.camera_rounded, 'Camera', 2),
-                  buildNavItem(Icons.cases_outlined, 'My Page', 3),
+                  buildNavItem(Icons.person_outline_rounded, 'My Page', 3),
                 ],
               ),
             ),
@@ -196,7 +216,7 @@ class _CameraPageState extends State<PickImage> {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      _pickImageFromGallery();
+                      _pickImageFromWeb();
                     },
                     child: const SizedBox(
                       child: Column(
@@ -243,38 +263,38 @@ class _CameraPageState extends State<PickImage> {
     );
   }
 
-  Future _pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedImage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.of(context).pop();
-  }
-
-  // Future _pickImageFromWeb() async {
-  //   try {
-  //     final result = await file_picker.FilePicker.platform.pickFiles(
-  //       type: file_picker.FileType.custom,
-  //       allowedExtensions: ['jpg', 'jpeg', 'png'],
-  //     );
-
-  //     if (result == null || result.files.isEmpty) {
-  //       return;
-  //     }
-
-  //     final file = File(result.files.single.path!);
-  //     setState(() {
-  //       selectedImage = file;
-  //       _image = file.readAsBytesSync();
-  //     });
-  //   } catch (e) {
-  //     print("Error picking image from web: $e");
-  //   }
+  // Future _pickImageFromGallery() async {
+  //   final returnImage =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (returnImage == null) return;
+  //   setState(() {
+  //     selectedImage = File(returnImage.path);
+  //     _image = File(returnImage.path).readAsBytesSync();
+  //   });
   //   Navigator.of(context).pop();
   // }
+
+  Future _pickImageFromWeb() async {
+    try {
+      final result = await file_picker.FilePicker.platform.pickFiles(
+        type: file_picker.FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png'],
+      );
+
+      if (result == null || result.files.isEmpty) {
+        return;
+      }
+
+      final file = File(result.files.single.path!);
+      setState(() {
+        selectedImage = file;
+        _image = file.readAsBytesSync();
+      });
+    } catch (e) {
+      print("Error picking image from web: $e");
+    }
+    Navigator.of(context).pop();
+  }
 
   Future _pickImageFromCamera() async {
     final returnImage =
@@ -290,7 +310,7 @@ class _CameraPageState extends State<PickImage> {
   Future<void> _uploadImage() async {
     if (selectedImage == null) return;
 
-    String uploadUrl = "http://172.30.1.81:8000/upload";
+    String uploadUrl = "http://172.30.1.60:8000/image";
     Dio dio = Dio();
 
     try {
@@ -302,13 +322,36 @@ class _CameraPageState extends State<PickImage> {
         "model_name": selectedModel,
       });
 
-      Response response = await dio.post(
+      Response uploadResponse = await dio.post(
         uploadUrl,
         data: formData,
       );
 
-      print("Server Response: ${response.data}");
+      Logger().e(uploadResponse);
+      print("Server Response: ${uploadResponse.data}");
+
+      // if (uploadResponse.statusCode == 200) {
+      //   setState(() {
+      //     // Extract class_name values and store them in classNames list
+      //     classNames = List<dynamic>.from(uploadResponse.data[0]
+      //         .map((item) => item["class_name"].toString()));
+      //     print(classNames);
+      //   });
+      // }
+
+      if (uploadResponse.statusCode == 200) {
+        setState(() {
+          classNames = List<dynamic>.from(
+            Set<String>.from(
+              uploadResponse.data[0]
+                  .map((item) => item["class_name"].toString()),
+            ),
+          );
+          print(classNames);
+        });
+      }
     } catch (e) {
+      Logger().e(e);
       print("Error uploading image: $e");
     }
   }
