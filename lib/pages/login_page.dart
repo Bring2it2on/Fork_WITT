@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:login_auth/components/auth_button.dart';
 import 'package:login_auth/components/square_tile.dart';
 import 'package:login_auth/components/textfield.dart';
+import 'package:login_auth/services/assets_manager.dart';
 import 'package:login_auth/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,7 +25,9 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: Color(0xFF45757B),
+          ),
         );
       },
     );
@@ -34,9 +37,9 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-      Navigator.pop(context); // Close the dialog
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
-      Navigator.pop(context); // Close the dialog
+      Navigator.pop(context);
       showErr(e.code);
     }
   }
@@ -194,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   SquareTile(
                     onTap: () => AuthService().signInWithGoogle(),
-                    imagePath: 'assets/images/google.png',
+                    imagePath: AssetsManager.googleLogo,
                   ),
                 ],
               ),
