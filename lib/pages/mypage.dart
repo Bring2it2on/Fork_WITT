@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:login_auth/components/button.dart';
+import 'package:login_auth/services/assets_manager.dart';
 // import 'package:login_auth/services/assets_manager.dart';
 
 class MyPage extends StatefulWidget {
@@ -12,8 +14,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   final user = FirebaseAuth.instance.currentUser!;
-
-  int _currentIndex = 3;
+  int _selectedIndex = 3;
 
   void logOut() {
     FirebaseAuth.instance.signOut();
@@ -30,15 +31,15 @@ class _MyPageState extends State<MyPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                height: 240,
+                height: 180,
               ),
-              // Center(
-              //   child: Image.asset(
-              //     AssetsManager.bye,
-              //     width: 200,
-              //     height: 200,
-              //   ),
-              // ),
+              Center(
+                child: Image.asset(
+                  AssetsManager.bye,
+                  width: 200,
+                  height: 200,
+                ),
+              ),
               const Text(
                 "감사합니다 \n곧 다시 만나요!",
                 style: TextStyle(
@@ -66,25 +67,54 @@ class _MyPageState extends State<MyPage> {
           ),
         ),
       ),
-      bottomNavigationBar: SizedBox(
-        height: 90,
-        child: BottomAppBar(
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
           color: const Color(0xFF45757B),
-          shadowColor: Colors.grey.shade100,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
-              left: 12,
-              right: 12,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildNavItem(Icons.home_outlined, 'Home', 0),
-                buildNavItem(Icons.question_answer_rounded, 'Chat', 1),
-                buildNavItem(Icons.camera_rounded, 'Camera', 2),
-                buildNavItem(Icons.person_outline_rounded, 'My Page', 3),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: Colors.black,
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.white,
+              color: Colors.black,
+              tabs: const [
+                GButton(
+                  icon: Icons.home_rounded,
+                  text: 'Home',
+                ),
+                GButton(
+                  icon: Icons.question_answer_rounded,
+                  text: 'Chat',
+                ),
+                GButton(
+                  icon: Icons.camera_rounded,
+                  text: 'Camera',
+                ),
+                GButton(
+                  icon: Icons.person_outline_rounded,
+                  text: 'My Page',
+                ),
               ],
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+                navigateTo(index);
+              },
             ),
           ),
         ),
@@ -92,50 +122,20 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  Widget buildNavItem(IconData icon, String label, int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _currentIndex = index;
-        });
-        switch (_currentIndex) {
-          case 0:
-            Navigator.pushNamed(context, '/home');
-            break;
-          case 1:
-            Navigator.pushNamed(context, '/search');
-            break;
-          case 2:
-            Navigator.pushNamed(context, '/camera');
-            break;
-          case 3:
-            Navigator.pushNamed(context, '/mypage');
-            break;
-        }
-      },
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color:
-                _currentIndex == index ? Colors.white : const Color(0xFF292929),
-            size: 28,
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              color: _currentIndex == index
-                  ? Colors.white
-                  : const Color(0xFF292929),
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-    );
+  void navigateTo(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/search');
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/camera');
+        break;
+      case 3:
+        Navigator.pushNamed(context, '/mypage');
+        break;
+    }
   }
 }
