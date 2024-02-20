@@ -8,7 +8,7 @@ class Welcome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF7DC7BF),
+      backgroundColor: const Color(0xFF45757B),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -17,7 +17,7 @@ class Welcome extends StatelessWidget {
             ),
             Center(
               child: Image.asset(
-                AssetsManager.wittLogo,
+                AssetsManager.wittLogoDark,
                 width: 200,
                 height: 200,
               ),
@@ -62,7 +62,9 @@ class Welcome extends StatelessWidget {
                 Text(
                   'Countinue as',
                   style: TextStyle(
-                    color: Color(0xFF292929),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
                 ),
                 SizedBox(
@@ -71,13 +73,15 @@ class Welcome extends StatelessWidget {
                 Text(
                   'a Guest',
                   style: TextStyle(
-                    color: Color(0xFF292929),
-                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                     fontSize: 14,
                   ),
                 ),
               ],
             ),
+            const SizedBox(
+              height: 80,
+            )
           ],
         ),
       ),

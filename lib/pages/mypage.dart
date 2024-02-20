@@ -23,7 +23,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFF45757B),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -31,25 +31,14 @@ class _MyPageState extends State<MyPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(
-                height: 180,
+                height: 100,
               ),
               Center(
                 child: Image.asset(
-                  AssetsManager.bye,
-                  width: 200,
-                  height: 200,
+                  AssetsManager.yar,
+                  width: 320,
+                  height: 320,
                 ),
-              ),
-              const Text(
-                "감사합니다 \n곧 다시 만나요!",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 16,
               ),
               Center(
                 child: GestureDetector(
@@ -62,7 +51,9 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),
@@ -79,15 +70,23 @@ class _MyPageState extends State<MyPage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: 8,
+            ),
             child: GNav(
               rippleColor: Colors.grey[300]!,
               hoverColor: Colors.grey[100]!,
               gap: 8,
               activeColor: Colors.black,
               iconSize: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: const Duration(milliseconds: 400),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+              duration: const Duration(
+                milliseconds: 400,
+              ),
               tabBackgroundColor: Colors.white,
               color: Colors.black,
               tabs: const [
@@ -125,16 +124,28 @@ class _MyPageState extends State<MyPage> {
   void navigateTo(int index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/home').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
       case 1:
-        Navigator.pushNamed(context, '/search');
+        Navigator.pushNamed(context, '/search').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
       case 2:
         Navigator.pushNamed(context, '/camera');
         break;
       case 3:
-        Navigator.pushNamed(context, '/mypage');
+        Navigator.pushNamed(context, '/mypage').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
     }
   }

@@ -26,7 +26,7 @@ class HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -34,24 +34,6 @@ class HomeState extends State<Home> {
               children: [
                 const SizedBox(
                   height: 80,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    children: [
-                      Text(
-                        "안녕하세요? \n${user.email}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      const SizedBox(
-                        height: 32,
-                      ),
-                    ],
-                  ),
                 ),
                 const SafeArea(
                   child: Center(
@@ -62,7 +44,9 @@ class HomeState extends State<Home> {
                   height: 64,
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
                   child: Column(
                     children: [
                       Text(
@@ -90,7 +74,9 @@ class HomeState extends State<Home> {
                   height: 40,
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32,
+                  ),
                   child: Column(
                     children: [
                       Text(
@@ -130,7 +116,7 @@ class HomeState extends State<Home> {
                           onTap: () {
                             Navigator.pushNamed(
                               context,
-                              '/detect',
+                              '/explore',
                             );
                           },
                           child: const InfoCard(
@@ -148,7 +134,10 @@ class HomeState extends State<Home> {
                   height: 40,
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(left: 32, right: 32),
+                  padding: EdgeInsets.only(
+                    left: 32,
+                    right: 32,
+                  ),
                   child: Divider(),
                 ),
                 const SizedBox(
@@ -158,32 +147,45 @@ class HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 32),
+                      padding: const EdgeInsets.only(
+                        right: 32,
+                      ),
                       child: TextButton(
                         onPressed: () {},
                         child: const Text(
                           "Privacy",
-                          style: TextStyle(color: Color(0xFF292929)),
+                          style: TextStyle(
+                            color: Color(0xFF292929),
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 32, right: 32),
+                      padding: const EdgeInsets.only(
+                        left: 32,
+                        right: 32,
+                      ),
                       child: TextButton(
                         onPressed: () {},
                         child: const Text(
                           "Terms",
-                          style: TextStyle(color: Color(0xFF292929)),
+                          style: TextStyle(
+                            color: Color(0xFF292929),
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 32),
+                      padding: const EdgeInsets.only(
+                        left: 32,
+                      ),
                       child: TextButton(
                         onPressed: () {},
                         child: const Text(
                           "About",
-                          style: TextStyle(color: Color(0xFF292929)),
+                          style: TextStyle(
+                            color: Color(0xFF292929),
+                          ),
                         ),
                       ),
                     ),
@@ -196,21 +198,27 @@ class HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(
+                        12,
+                      ),
                       child: Image.asset(
                         AssetsManager.instaLogo,
                         width: 32,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(
+                        12,
+                      ),
                       child: Image.asset(
                         AssetsManager.pinterestLogo,
                         width: 32,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(
+                        12,
+                      ),
                       child: Image.asset(
                         AssetsManager.twitterLogo,
                         width: 32,
@@ -243,23 +251,31 @@ class HomeState extends State<Home> {
             boxShadow: [
               BoxShadow(
                 blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
+                color: Colors.black.withOpacity(
+                  .1,
+                ),
               )
             ],
           ),
           child: SafeArea(
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15.0,
+                vertical: 8,
+              ),
               child: GNav(
                 rippleColor: Colors.grey[300]!,
                 hoverColor: Colors.grey[100]!,
                 gap: 8,
                 activeColor: Colors.black,
                 iconSize: 24,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: const Duration(milliseconds: 400),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                duration: const Duration(
+                  milliseconds: 400,
+                ),
                 tabBackgroundColor: Colors.white,
                 color: Colors.black,
                 tabs: const [
@@ -298,16 +314,32 @@ class HomeState extends State<Home> {
   void navigateTo(int index) {
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/home').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
       case 1:
-        Navigator.pushNamed(context, '/search');
+        Navigator.pushNamed(context, '/search').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
       case 2:
-        Navigator.pushNamed(context, '/camera');
+        Navigator.pushNamed(context, '/camera').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
       case 3:
-        Navigator.pushNamed(context, '/mypage');
+        Navigator.pushNamed(context, '/mypage').then((value) => {
+              setState(() {
+                _selectedIndex = value as int;
+              })
+            });
         break;
     }
   }

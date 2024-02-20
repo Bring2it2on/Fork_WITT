@@ -115,7 +115,7 @@ class _TraslatePageState extends State<TraslatePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
@@ -130,13 +130,17 @@ class _TraslatePageState extends State<TraslatePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(
+              20,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 12),
+                    padding: const EdgeInsets.only(
+                      right: 12,
+                    ),
                     child: DropdownButtonFormField<TranslateLanguage>(
                       value: _sourceLanguage,
                       onChanged: (value) {
@@ -172,7 +176,9 @@ class _TraslatePageState extends State<TraslatePage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                    ),
                     child: DropdownButtonFormField<TranslateLanguage>(
                       value: _targetLanguage,
                       onChanged: (value) {
@@ -209,9 +215,13 @@ class _TraslatePageState extends State<TraslatePage> {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(
+            height: 4,
+          ),
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(
+              20,
+            ),
             child: TextField(
               controller: _controller,
               decoration: const InputDecoration(
@@ -279,7 +289,7 @@ class _TraslatePageState extends State<TraslatePage> {
             ],
           ),
           const SizedBox(
-            height: 40,
+            height: 80,
           )
         ],
       ),
